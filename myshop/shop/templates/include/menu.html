@@ -1,0 +1,89 @@
+{% load static %}
+<nav class="bg-white border-b-2 fixed top-0 left-0 w-full z-50">
+    <div class="px-3">
+        <div class="flex justify-between h-16 items-center">
+
+            <!-- Левый блок: Логотип -->
+            <div class="flex-shrink-0 flex items-center">
+                <a href="{% url 'shop:product_list' %}" class="text-xl font-bold text-blue-600">MyShop</a>
+            </div>
+
+            <!-- Центр: Пункты навигации (десктоп) -->
+            <div class="hidden md:flex space-x-6">
+                <a href="{% url 'shop:product_list' %}"
+                    class="text-blue-800 hover:text-blue-900 px-3 py-2 rounded-md text-sm font-medium uppercase">Главная</a>
+                <a href="#"
+                    class="text-blue-800 hover:text-blue-900 px-3 py-2 rounded-md text-sm font-medium uppercase">О
+                    нас</a>
+                <a href="#"
+                    class="text-blue-800 hover:text-blue-900 px-3 py-2 rounded-md text-sm font-medium uppercase">Контакты</a>
+
+
+            </div>
+
+            <!-- Правый блок: Корзина -->
+            <div class="flex items-center space-x-4">
+
+                <!-- Корзина  и аутентификация-->
+                <div class="relative flex items-center space-x-2 flex-row gap-5">
+
+                    {% with total_items=cart|length %}
+                    <a href="{% url 'cart:cart_detail' %}" class="flex items-center text-blue-800 hover:text-blue-900">
+                        <img src="{% static 'img/Cart.svg' %}" alt="Cart" class="w-5 h-5">
+                        {% if total_items > 0 %}
+                        <span class="ml-1 font-bold text-md">{{ total_items }}</span>
+                        {% endif %}
+                    </a>
+                    {% endwith %}
+                </div>
+                <!-- Правый блок: Корзина -->
+
+                <!-- Бургер меню -->
+                <div class="md:hidden">
+                    <button id="mobile-menu-button"
+                        class="relative w-8 h-8 flex flex-col justify-between items-center p-2 text-blue-800 hover:text-blue-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+
+                        <!-- Линии бургера -->
+                        <span
+                            class="block w-8 h-0.5 bg-current transform transition duration-300 ease-in-out origin-center"></span>
+                        <span
+                            class="block w-8 h-0.5 bg-current transform transition duration-300 ease-in-out origin-center"></span>
+                        <span
+                            class="block w-8 h-0.5 bg-current transform transition duration-300 ease-in-out origin-center"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Мобильное меню -->
+    <div id="mobile-menu" class="hidden md:hidden px-2 pt-2 pb-3 space-y-1">
+        <a href="{% url 'shop:product_list' %}"
+            class="block px-3 py-2 rounded-md text-base font-medium text-blue-800 hover:text-blue-900">Главная</a>
+        <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-blue-800 hover:text-blue-900">О нас</a>
+        <a href="#"
+            class="block px-3 py-2 rounded-md text-base font-medium text-blue-800 hover:text-blue-900">Контакты</a>
+    </div>
+</nav>
+
+<script>
+    // анимация бургера
+    document.addEventListener('DOMContentLoaded', function () {
+        const btn = document.getElementById('mobile-menu-button');
+        const menu = document.getElementById('mobile-menu');
+        const lines = btn.querySelectorAll('span');
+
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+
+            // Анимация линий
+            lines[0].classList.toggle('rotate-45');
+            lines[0].classList.toggle('translate-y-2');
+
+            lines[1].classList.toggle('opacity-0');
+
+            lines[2].classList.toggle('-rotate-45');
+            lines[2].classList.toggle('-translate-y-2');
+        });
+    });
+</script>
