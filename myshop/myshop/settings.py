@@ -58,6 +58,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'cart.context_processors.cart', #добавить в settings.py в раздел TEMPLATES 'cart.context_processors.cart'
+                'shop.context_processors.categories', #для вывода ктегорий товара в любой части сайта 
             ],
         },
     },

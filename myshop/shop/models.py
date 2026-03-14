@@ -6,6 +6,7 @@ from django.urls import reverse # Для генерации ссылок
 class Category(models.Model):
     name = models.CharField(max_length=200, verbose_name="Название")
     slug = models.SlugField(max_length=200, unique=True, verbose_name="URL (слаг)")
+    image = models.ImageField(upload_to='categories/', blank=True, null=True, verbose_name="Картинка Категории Продукта")
 
     class Meta:
         ordering = ['name']
@@ -50,34 +51,17 @@ class Product(models.Model):
 
 # модель слайдера для загрузки слайдера на главной странице
 
-class Slider(models.Model):
-
-    title = models.CharField(max_length=200)
-    subtitle = models.CharField(max_length=300)
-
-    active = models.BooleanField(default=True)
-
-    def __str__(self):
-        return self.title
-
-
-class SliderImage(models.Model):
-
-    slider = models.ForeignKey(
-        Slider,
-        related_name="images",
-        on_delete=models.CASCADE
-    )
-
+class Slide(models.Model):
     image = models.ImageField(upload_to="slider/")
-
     order = models.PositiveIntegerField(default=0)
-
-    def __str__(self):
-        return f"Image for {self.slider.title}"
-
+    active = models.BooleanField(default=True)
 
     class Meta:
         ordering = ["order"]
+        verbose_name = "Слайд"
+        verbose_name_plural = "Слайды"
+
+    def __str__(self):
+        return f"Slide {self.id}"
     
 

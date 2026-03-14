@@ -1,6 +1,8 @@
 
 from django.contrib import admin
-from .models import Category, Product
+from .models import Category, Product, Slide
+from django.utils.html import format_html
+
 
 
 
@@ -18,3 +20,16 @@ class ProductAdmin(admin.ModelAdmin):
     list_filter = ['available', 'created', 'updated', 'category']
     list_editable = ['price', 'available'] # Можно менять цену прямо в списке!
     prepopulated_fields = {'slug': ('name',)}
+
+
+@admin.register(Slide)
+class SlideAdmin(admin.ModelAdmin):
+    list_display = ("preview", "order", "active")
+    list_editable = ("order", "active")
+
+    def preview(self, obj):
+        if obj.image:
+            return format_html('<img src="{}" width="120" />', obj.image.url)
+        return "-"
+
+

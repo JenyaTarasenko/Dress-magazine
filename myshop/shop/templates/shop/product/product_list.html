@@ -2,19 +2,164 @@
 {% load static %}
 
 {% block content %}
-<div class="mt-[50px]">
+<!-- секция hero -->
+<section class="relative w-full h-screen hero">
+    <!-- Фоновая картинка -->
+    <img src="{% static 'img/hero.webp' %}" alt="Фоновое изображение"
+        class="absolute inset-0 w-full h-full object-cover" loading="eager">
 
-    {% for c in categories %}
+    <!-- Фоновая картинка для мобильных -->
+    <!-- <img src="{% static 'img/hero-mob.webp' %}" alt="Фоновое изображение для мобильных"
+        class="block sm:hidden absolute inset-0 w-full h-full object-cover" loading="lazy"> -->
 
-    <li class="flex items-center gap-5 mb-5 text-blue-800 hover:text-blue-900">
-        <a href="{{ c.get_absolute_url }}">
-            {{ c.name }}
+
+    <!-- Полупрозрачный оверлей (по желанию для читаемости текста) -->
+    <div class="absolute inset-0 bg-black bg-opacity-10"></div>
+
+    <!-- Контент поверх картинки -->
+    <div class="relative z-10 flex flex-col justify-center h-full px-8 md:px-16 mt-20">
+        <h1 class="text-5xl md:text-6xl font-bold text-white mb-4 max-w-2xl">Стильная одежда с доставкой по всей Украине
+        </h1>
+        <h2 class="text-xl md:text-2xl text-white mb-6 max-w-2xl">Обновите гардероб: от базовых вещей до эксклюзивных
+            коллекций
+        </h2>
+        <a href="#"
+            class="flex items-center justify-center w-[250px] h-[50px] bg-white text-black rounded-md hover:bg-gray-200 transition sm:mt-10 mt-5">
+            <span class="mr-2">Подробнее</span>
+            <!-- Стрелка вправо -->
+            <img src="{% static 'img/strela.svg' %}" alt="Стрелка вправо">
         </a>
-    </li>
+    </div>
+</section>
+<!-- секция hero -->
+<!-- секция текст -->
+<section class="mt-10 px-5 flex justify-center items-center">
+    <div class="flex flex-row">
+        <div class="flex flex-col">
+            <h2 class="text-2xl font-normal uppercase">Одежда из Европы и Америки</h2>
+            <div class="w-[55px] h-[3px] bg-black"></div>
+
+            <h3 class="text-lg font-thin uppercase max-w-lg mt-5">Футболки кофты шлепки с Европы и Америки под заказ и
+                со склада в Украине</h3>
+        </div>
+    </div>
+</section>
+<!-- секция hero -->
+
+
+
+<!-- секция слфйдер-->
+<section class="relative max-w-9xl mx-auto mt-5">
+
+    <!-- стрелка влево -->
+    <button id="btn-left"
+        class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/80 backdrop-blur rounded-full w-10 h-10 flex items-center justify-center shadow">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-black" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+        </svg>
+    </button>
+
+    <!-- контейнер слайдера -->
+    <div id="slider" class="flex w-full gap-5 overflow-x-auto scroll-smooth px-12">
+        {% for slide in slider %}
+        <img src="{{ slide.image.url }}"
+            class="flex-shrink-0 sm:min-w-[485px] min-w-[275px] sm:h-[300px] h-[175px] object-cover rounded">
+        {% endfor %}
+    </div>
+
+    <!-- стрелка вправо -->
+    <button id="btn-right"
+        class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/80 backdrop-blur rounded-full w-10 h-10 flex items-center justify-center shadow">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-black" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+        </svg>
+    </button>
+
+</section>
+
+<script>
+    const slider = document.getElementById("slider");
+    const scrollAmount = 300;
+
+    document.getElementById("btn-right").addEventListener("click", () => {
+        slider.scrollBy({ left: scrollAmount, behavior: "smooth" });
+    });
+
+    document.getElementById("btn-left").addEventListener("click", () => {
+        slider.scrollBy({ left: -scrollAmount, behavior: "smooth" });
+    });
+</script>
+<!-- секция слфйдер-->
+
+<!-- секция текст секция -->
+<section class="w-full flex justify-start mt-20 pl-5 flex-row">
+    <div class="flex flex-col">
+        <h2 class="text-xl font-normal uppercase">Категории магазина</h2>
+        <div class="w-[55px] h-[2px] bg-black"></div>
+    </div>
+</section>
+<!-- секция текст секция -->
+
+<!-- секция категории -->
+<section class="category flex justify-center items-center mt-5 gap-5 flex-row flex-wrap">
+    {% for c in categories %}
+    <a href="{{ c.get_absolute_url }}">
+        <div class="group flex flex-col items-center gap-2">
+            <div class="relative overflow-hidden rounded">
+                <img src="{{ c.image.url }}" class="w-[275px] h-[175px] object-cover transition duration-300
+               group-hover:scale-110 group-active:scale-105">
+                <div class="absolute inset-0 bg-black/0
+                    group-hover:bg-black/30
+                    transition duration-300">
+                </div>
+            </div>
+            <span class="text-sm font-normal tracking-widest">
+                {{ c.name }}
+            </span>
+        </div>
+    </a>
 
     {% endfor %}
-    <!-- Вывод категорий товара  -->
-    <!-- вывод продуктов -->
+</section>
+<!-- секция категории -->
+
+
+<!-- Блок категории с текстом поверх картинки -->
+<a href="#"
+    class="relative w-full max-w-[1000px] h-[500px] sm:h-[400px] md:h-[450px] lg:h-[500px] rounded-lg overflow-hidden mx-auto group">
+
+    <!-- Картинка -->
+    <img src="{% static 'img/bast.png' %}" alt="Категория"
+        class="w-full h-full object-cover transition-transform mt-20">
+
+    <!-- Тёмная полупрозрачная прослойка для текста -->
+    <div class="absolute inset-0 bg-black/60"></div>
+
+    <!-- Текст -->
+    <div class="absolute bottom-0 left-0 p-6 sm:p-4 md:p-5">
+        <h2 class="text-white text-xl sm:text-xl md:text-lg font-thin">
+            Скидки до <span class="font-bold text-3xl">10%</span> на футболки
+        </h2>
+    </div>
+</a>
+<!-- Блок категории с текстом поверх картинки -->
+
+<!-- секция текст секция -->
+<section class="w-full flex justify-center mt-20 pl-5 flex-row">
+    <div class="flex flex-col">
+        <h2 class="text-xl font-normal uppercase">Популярные товары</h2>
+        <div class="w-[55px] h-[2px] bg-black"></div>
+
+        <h3 class="text-xl font-thin uppercase max-w-lg mt-5">Все наши товары серцифицированны и проверены в Европе и
+            Америке</h3>
+    </div>
+</section>
+<!-- секция текст секция -->
+
+<!-- Блок  популярные товары [:3] ограничено 3 товарами -->
+<div class="mt-[50px] flex flex-wrap gap-5 justify-center items-center">
     {% for product in products %}
     <div class="item">
         <a href="{{ product.get_absolute_url }}">
@@ -23,16 +168,39 @@
         <a href="{{ product.get_absolute_url }}">{{ product.name }}</a>
         <br>
         ${{ product.price }}
-        <!-- форма для добавления товара в корзину -->
-        <form action="{% url 'cart:cart_add' product.id %}" method="post">
+
+        <!-- <form action="{% url 'cart:cart_add' product.id %}" method="post">
             {{ cart_product_form }}
             {% csrf_token %}
             <input type="submit" value="Add to cart">
-        </form>
-        <!-- форма для добавления товара в корзину -->
+        </form> -->
     </div>
     {% endfor %}
 
+
+
 </div>
+<!-- Блок  популярные товары [:3] ограничено 3 товарами -->
+
+
+<!-- Блок категории с текстом поверх картинки -->
+<a href="#"
+    class="relative w-full max-w-[1000px] h-[500px] sm:h-[400px] md:h-[450px] lg:h-[500px] rounded-lg overflow-hidden mx-auto group">
+
+    <!-- Картинка -->
+    <img src="{% static 'img/block-new.png' %}" alt="Категория"
+        class="w-full h-full object-cover transition-transform mt-20">
+
+    <!-- Тёмная полупрозрачная прослойка для текста -->
+    <div class="absolute inset-0 bg-black/60"></div>
+
+    <!-- Текст -->
+    <div class="absolute bottom-0 left-0 p-6 sm:p-4 md:p-5">
+        <h2 class="text-white text-xl sm:text-xl md:text-lg font-thin">
+            Скидки до <span class="font-bold text-3xl">20%</span> на всю коллекцию старую
+        </h2>
+    </div>
+</a>
+<!-- Блок категории с текстом поверх картинки -->
 
 {% endblock %}

@@ -1,0 +1,36 @@
+{% extends "shop/base.html" %}
+{% load static %}
+
+{% block content %}
+<section class="relative w-full h-screen hero">
+    <img src="{% static 'img/hero.webp' %}" alt="Фоновое изображение"
+        class="absolute inset-0 w-full h-full object-cover" loading="eager">
+    <div class="absolute inset-0 bg-black bg-opacity-10"></div>
+    <div class="relative z-10 flex flex-col justify-center h-full px-8 md:px-16 mt-20">
+        <h1 class="text-5xl md:text-6xl font-bold text-white mb-4 max-w-2xl">Стильная одежда с доставкой по всей Украине
+        </h1>
+        <h2 class="text-xl md:text-2xl text-white mb-6 max-w-2xl">Обновите гардероб: от базовых вещей до эксклюзивных
+            коллекций
+        </h2>
+        <a href="#"
+            class="flex items-center justify-center w-[250px] h-[50px] bg-white text-black rounded-md hover:bg-gray-200 transition sm:mt-10 mt-5">
+            <span class="mr-2">Подробнее</span>
+            <!-- Стрелка вправо -->
+            <img src="{% static 'img/strela.svg' %}" alt="Стрелка вправо">
+        </a>
+    </div>
+</section>
+<section class="w-full flex justify-start mt-20 pl-5 flex-row">
+    <div class="flex flex-col">
+        <h2 class="text-xl font-normal uppercase">{{ category.name }}</h2>
+        <div class="w-[55px] h-[2px] bg-black"></div>
+    </div>
+</section>
+<div class="mt-[50px] flex flex-wrap gap-5 justify-center items-center">
+    {% for product in products %}
+    {% include "include/product_card.html" %}
+    {% empty %}
+    <p>Товары в этой категории отсутствуют.</p>
+    {% endfor %}
+</div>
+{% endblock %}

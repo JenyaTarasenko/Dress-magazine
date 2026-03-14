@@ -1,67 +1,142 @@
 {% extends "shop/base.html" %}
 {% load static %}
 
-{% block title %}
-Your shopping cart
-{% endblock %}
+{% block title %}Корзина{% endblock %}
 
 {% block content %}
-<h1>Your shopping cart</h1>
-<table class="cart">
-    <thead>
-        <tr>
-            <th>Image</th>
-            <th>Product</th>
-            <th>Quantity</th>
-            <th>Remove</th>
-            <th>Unit price</th>
-            <th>Price</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for item in cart %}
-        {% with product=item.product %}
-        <tr>
-            <td>
-                <a href="{{ product.get_absolute_url }}">
-                    <img src="{% if product.image %}{{ product.image.url }}
-                {% else %}{% static 'img/no_image.png' %}{% endif %}"
-                        style="width: 100px; height: 100px; object-fit: cover;">
+
+<div class="max-w-6xl mx-auto px-4 py-10 mt-20">
+
+
+    <div id="cart-container">
+
+        {% if cart %}
+
+        <div class="flex flex-col gap-8">
+
+            {% for item in cart %}
+            {% with product=item.product %}
+
+            <div class="flex flex-col sm:flex-row gap-6 border-b pb-6">
+
+                <!-- Картинка -->
+                <div class="relative">
+
+                    <a href="{{ product.get_absolute_url }}">
+                        <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'img/no_image.png' %}{% endif %}"
+                            class="w-32 h-32 sm:w-40 sm:h-40 object-cover rounded">
+                    </a>
+
+                    <!-- Удалить -->
+                    <form hx-post="{% url 'cart:cart_remove' product.id %}" hx-target="#cart-container"
+                        hx-swap="innerHTML" class="absolute top-1 right-1">
+
+                        {% csrf_token %}
+
+                        <button
+                            class="bg-white shadow rounded-full w-7 h-7 flex items-center justify-center text-red-500 hover:text-red-700">
+                            <img src="{% static 'img/Trash.svg' %}" class="w-4 h-4">
+                        </button>
+
+                    </form>
+
+                </div>
+
+
+                <!-- Информация -->
+                <div class="flex-1 flex flex-col justify-between">
+
+                    <a href="{{ product.get_absolute_url }}" class="text-lg uppercase font-light">
+                        {{ product.name }}
+                    </a>
+
+
+                    <!-- Цена -->
+                    <div class="text-gray-700 font-thin">
+                        ${{ item.price }}
+                    </div>
+
+
+                    <!-- Количество -->
+                    <form hx-post="{% url 'cart:cart_add' product.id %}" hx-target="#cart-container" hx-swap="innerHTML"
+                        class="flex items-center mt-3">
+
+                        {% csrf_token %}
+
+                        <button type="button" onclick="this.nextElementSibling.stepDown(); this.form.requestSubmit();"
+                            class="px-3 py-1 border border-gray-200 hover:bg-gray-200 rounded-full">
+                            −
+                        </button>
+
+                        <input type="number" name="quantity" value="{{ item.quantity }}" min="1"
+                            class="w-12 text-center outline-none" onchange="this.form.requestSubmit()">
+
+                        <button type="button" onclick="this.previousElementSibling.stepUp(); this.form.requestSubmit();"
+                            class="px-3 py-1 border border-gray-200 hover:bg-gray-300 rounded-full ">
+                            +
+                        </button>
+
+                        <input type="hidden" name="override" value="True">
+
+                    </form>
+
+                </div>
+
+
+                <!-- Сумма -->
+                <div class="flex flex-col items-end justify-between">
+
+                    <div class="text-black font-semibold text-2xl">
+                        ${{ item.total_price }}
+                    </div>
+
+                </div>
+
+            </div>
+
+            {% endwith %}
+            {% endfor %}
+
+        </div>
+
+
+        <!-- Итог -->
+        <div class="flex flex-col sm:flex-row sm:justify-between justify-center items-center mt-10 gap-4 flex-wrap">
+
+            <div class="text-3xl font-bold text-black">
+                <span class="text-gray-500 text-lg font-thin">Итого:</span> ${{ cart.get_total_price }}
+            </div>
+
+            <div class="flex gap-4 flex-row flex-wrap items-center justify-center mt-5 sm:mt-0">
+
+                <a href="{% url 'shop:product_list' %}"
+                    class="px-6 py-2 border rounded hover:bg-gray-100 w-full sm:w-[250px] text-center uppercase">
+                    Продолжить покупки
                 </a>
-            </td>
-            <td>{{ product.name }}</td>
-            <td>
-                <form action="{% url 'cart:cart_add' product.id %}" method="post">
-                    {{ item.update_quantity_form.quantity }}
-                    {{ item.update_quantity_form.override }}
-                    <input type="submit" value="Update">
-                    {% csrf_token %}
-                </form>
-            </td>
-            <td>
-                <form action="{% url 'cart:cart_remove' product.id %}" method="post">
-                    <input type="submit" value="Remove">
-                    {% csrf_token %}
-                </form>
-            </td>
-            <td class="num">${{ item.price }}</td>
-            <td class="num">${{ item.total_price }}</td>
-        </tr>
-        {% endwith %}
-        {% endfor %}
-        <tr class="total">
-            <td>Total</td>
-            <td colspan="4"></td>
-            <td class="num">${{ cart.get_total_price }}</td>
-        </tr>
-    </tbody>
-</table>
-<p class="text-right">
-    <a href="{% url 'shop:product_list' %}" class="button
-    light">Continue shopping</a>
-    <!-- <a href="#" class="button">Checkout</a> -->
-    <a href="{% url 'orders:order_create' %}" class="button">Заказвть</a>
+
+                <a href="{% url 'orders:order_create' %}"
+                    class="px-6 py-2 bg-black text-white rounded hover:bg-green-600 hover:text-black w-full sm:w-[250px] text-center uppercase">
+                    Оформить заказ
+                </a>
+
+            </div>
+
+        </div>
+
+        {% else %}
+        <div class="flex flex-col items-center justify-center">
+            <p class="text-gray-500 font-thin text-2xl">Корзина пустая</p>
+            <a href="{% url 'shop:product_list' %}"
+                class="px-6 py-2 border rounded hover:bg-gray-100 w-full sm:w-[250px] text-center uppercase mt-5">
+                Продолжить покупки
+            </a>
+        </div>
 
 
-</p>
+        {% endif %}
+
+    </div>
+
+</div>
+
 {% endblock %}
