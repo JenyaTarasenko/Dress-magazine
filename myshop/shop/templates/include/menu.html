@@ -5,39 +5,60 @@
 
             <!-- Левый блок: Логотип -->
             <div class="flex-shrink-0 flex items-center">
-                <a href="{% url 'shop:product_list' %}" class="text-xl font-bold text-blue-600"><img
+                <a href="{% url 'shop:product_list' %}" class="text-xl font-bold text-red-600"><img
                         src="{% static 'img/Logo.svg' %}" alt="Logo"></a>
             </div>
 
             <!-- Центр: Пункты навигации (десктоп) -->
             <div class="hidden md:flex space-x-6">
                 <a href="{% url 'shop:product_list' %}"
-                    class="text-black hover:text-blue-900 px-3 py-2 rounded-md text-sm font-normal">Главная</a>
+                    class="relative px-3 py-2 rounded-md text-sm font-normal
+                            text-black 
+                            {% if request.resolver_match.url_name == 'product_list' %}after:w-full{% endif %}
+                            after:block after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:bg-black after:transition-all hover:after:w-full">
+                    Главная
+                </a>
                 <!-- DROPDOWN -->
                 <div class="relative group">
-                    <button class="text-black hover:text-blue-900 px-3 py-2 text-sm font-normal">
+                    <button
+                        class="relative text-black px-3 py-2 rounded-md text-sm font-normal after:block after:absolute after:left-0 after:-bottom-1 after:w-0 after:h-0.5 after:bg-black after:transition-all hover:after:w-full">
                         Категории
                     </button>
-
-                    <!-- dropdown menu -->
+                    <!-- dropdown menu категории-->
                     <div class="absolute left-0 top-full w-48 bg-white shadow-lg rounded-md 
-                                    opacity-0 invisible group-hover:opacity-100 group-hover:visible
-                                    transition duration-200">
-
+                                opacity-0 invisible group-hover:opacity-100 group-hover:visible
+                                transition duration-200">
                         {% for category in categories %}
                         <a href="{{ category.get_absolute_url }}"
-                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                            class="block px-4 py-2 text-sm font-normal text-gray-700 
+                                hover:bg-gray-100
+                                {% if request.path == category.get_absolute_url %}bg-gray-200 font-semibold{% endif %}">
                             {{ category.name }}
                         </a>
                         {% endfor %}
                     </div>
+                    <!-- dropdown menu категории-->
                 </div>
-                <a href="#" class="text-black hover:text-blue-900 px-3 py-2 rounded-md text-sm font-normal">Акции</a>
-                <a href="#" class="text-black hover:text-blue-900 px-3 py-2 rounded-md text-sm font-normal">Как
-                    заказать</a>
-                <a href="#" class="text-black hover:text-blue-900 px-3 py-2 rounded-md text-sm font-normal">О нас</a>
-                <a href="#" class="text-black hover:text-blue-900 px-3 py-2 rounded-md text-sm font-normal">Доставка и
-                    оплата</a>
+                <a href="#"
+                    class="relative px-3 py-2 rounded-md text-sm font-normal
+                            text-black 
+                            {% if request.resolver_match.url_name == '/' %}after:w-full{% endif %}
+                            after:block after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:bg-black after:transition-all hover:after:w-full">
+                    Акции
+                </a>
+                <a href="#"
+                    class="relative px-3 py-2 rounded-md text-sm font-normal
+                            text-black 
+                            {% if request.resolver_match.url_name == '/' %}after:w-full{% endif %}
+                            after:block after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:bg-black after:transition-all hover:after:w-full">
+                    О нас
+                </a>
+                <a href="#"
+                    class="relative px-3 py-2 rounded-md text-sm font-normal
+                            text-black 
+                            {% if request.resolver_match.url_name == '/' %}after:w-full{% endif %}
+                            after:block after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:bg-black after:transition-all hover:after:w-full">
+                    Доставка и оплата</a>
             </div>
 
             <!-- Правый блок: Корзина -->
@@ -76,11 +97,48 @@
     </div>
 
     <!-- Мобильное меню -->
-    <div id="mobile-menu" class="hidden md:hidden px-2 pt-2 pb-3 space-y-1">
+    <div id="mobile-menu" class="hidden md:hidden px-2 pt-2 pb-3 space-y-1 flex flex-col">
+
         <a href="{% url 'shop:product_list' %}"
-            class="block px-3 py-2 rounded-md text-base font-medium text-black hover:text-black">Главная</a>
-        <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-black hover:text-black">О нас</a>
-        <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-black hover:text-black">Контакты</a>
+            class="relative px-3 py-2 rounded-md text-sm font-normal
+                            text-black 
+                            {% if request.resolver_match.url_name == 'product_list' %}after:w-full{% endif %}
+                            after:block after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:bg-black after:transition-all hover:after:w-full">
+            Главная
+        </a>
+        <div class="relative group">
+            <button
+                class="relative text-black px-3 py-2 rounded-md text-sm font-normal after:block after:absolute after:left-0 after:-bottom-1 after:w-0 after:h-0.5 after:bg-black after:transition-all hover:after:w-full">
+                Категории
+            </button>
+            <!-- dropdown menu категории-->
+            <div class="relative group">
+                <button class="px-3 py-2 text-sm font-normal text-black rounded-md">
+                    Категории
+                </button>
+                <div class="absolute left-0 mt-2 w-48 bg-white shadow-lg rounded-md
+                            opacity-0 invisible group-hover:opacity-100 group-hover:visible
+                            transition-all duration-200 z-50">
+                    {% for category in categories %}
+                    <a href="{{ category.get_absolute_url }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100
+                            {% if request.path == category.get_absolute_url %}bg-gray-200 font-semibold{% endif %}">
+                        {{ category.name }}
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+            <!-- dropdown menu категории-->
+        </div>
+        <a href="#"
+            class="relative text-black px-3 py-2 rounded-md text-sm font-normal 
+            after:block after:absolute after:left-0 after:-bottom-1 after:w-0 after:h-0.5 after:bg-black after:transition-all hover:after:w-full">
+            О нас
+        </a>
+        <a href="#"
+            class="relative text-black px-3 py-2 rounded-md text-sm font-normal 
+            after:block after:absolute after:left-0 after:-bottom-1 after:w-0 after:h-0.5 after:bg-black after:transition-all hover:after:w-full">
+            Контакты
+        </a>
     </div>
 </nav>
 

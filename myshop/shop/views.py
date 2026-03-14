@@ -4,7 +4,9 @@ from cart.forms import CartAddProductForm
 # from review.forms import ReviewForm  #форма отзыва
 from django.db.models import Q
 
-
+# эта вьюха дает возможность показывать продукты на главной оганичено до 3 
+# также категорию через shop.context_processors.category в шапке сайта также выводит на разные страницы 
+# продуктов и категорий 
 def product_list(request, category_slug=None):
 
     category = None
@@ -37,7 +39,8 @@ def product_list(request, category_slug=None):
             'slider': slider
         }
     )
-# вывод одного продукта
+
+# вывод одного продукта детальная также мы предлагаем похожие товары 
 def product_detail(request, id, slug):
     product = get_object_or_404(Product,id=id, slug=slug, available=True)
       # Случайные 4 товара, кроме текущего
