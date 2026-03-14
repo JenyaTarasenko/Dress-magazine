@@ -13,6 +13,7 @@ class Order(models.Model):
         max_length=100,
         verbose_name="Город"
     )
+    phone = models.CharField(max_length=20, verbose_name="Телефон")
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     paid = models.BooleanField(default=False)

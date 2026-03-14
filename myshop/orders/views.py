@@ -51,6 +51,7 @@ def liqpay_webhook(request):
             
     return HttpResponse()
 
+# для формы заказа 
 def order_create(request):
     cart = Cart(request)
     if request.method == 'POST':
